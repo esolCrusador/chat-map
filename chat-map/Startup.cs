@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using ChatMap.Services;
 
 namespace ChatMap
 {
@@ -16,6 +13,8 @@ namespace ChatMap
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSingleton(SetupConfiguration());
+            services.AddSingleton<ConfigurationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,9 +24,20 @@ namespace ChatMap
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles();
             app.UseMvc(routes=> {
                 routes.MapRoute("Default", "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        public IConfigurationRoot SetupConfiguration()
+        {
+            var configBuilder = new ConfigurationBuilder();
+            configBuilder.AddEnvironmentVariables();
+            configBuilder.AddInMemoryCollection();
+
+            return configBuilder.Build();
         }
     }
 }
