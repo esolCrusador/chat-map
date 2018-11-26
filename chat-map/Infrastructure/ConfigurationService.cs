@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
-namespace ChatMap.Services
+namespace ChatMap.Infrastructure
 {
     public class ConfigurationService
     {
@@ -16,6 +17,14 @@ namespace ChatMap.Services
             get
             {
                 return _configurationRoot.GetValue<string>("GoogleApiKey");
+            }
+        }
+
+        public int MaxDownloads
+        {
+            get
+            {
+                return _configurationRoot.GetSection("AppSettings").GetValue<int>("MaxDownloads");
             }
         }
     }

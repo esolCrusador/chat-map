@@ -4,7 +4,7 @@ namespace ChatMap.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(bool reload = false)
         {
             return View();
         }
